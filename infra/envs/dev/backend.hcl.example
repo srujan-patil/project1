@@ -1,0 +1,8 @@
+# Copy to backend.hcl and fill in real values (do not commit backend.hcl with real state info if it's sensitive)
+# Usage: terraform init -backend-config=backend.hcl
+
+bucket         = "myorg-terraform-state"
+key            = "hotelapp/dev/terraform.tfstate"
+region         = "ap-south-1"
+dynamodb_table = "terraform-locks"
+encrypt        = true

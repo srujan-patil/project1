@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: hotelapp_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: app_admin
+      POSTGRES_PASSWORD: app_password
+      POSTGRES_DB: hotelapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d/migrations
+      - ./seed:/docker-entrypoint-initdb.d/seed
+      - ./docker/init-order.sh:/docker-entrypoint-initdb.d/00-init-order.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_admin -d hotelapp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db_data:
